@@ -4,6 +4,7 @@ import json
 
 app = FastAPI()
 
+# Tüm kurları döner
 @app.get("/api/rates")
 async def get_rates():
     try:
@@ -13,6 +14,7 @@ async def get_rates():
     except Exception as e:
         return JSONResponse(content={"error": str(e)}, status_code=500)
 
+# Belirli bir hedef kurun oranını döner (TRY → hedef)
 @app.get("/api/rate")
 async def get_specific_rate(
     target: str = Query(..., description="Hedef döviz, örn: USD")
@@ -34,6 +36,40 @@ async def get_specific_rate(
                 "base": base,
                 "target": target,
                 "rate": round(rate, 6)
+            }
+
+    except Exception as e:
+        return JSONResponse(content={"error": str(e)}, status_code=500)
+
+# Dövizler arası dönüşüm: base → target
+@app.get("/api/convert")
+async def convert_currency(
+    base: str = Query(..., description="Baz döviz birimi (örn: USD)"),
+    target: str = Query(..., description="Hedef döviz birimi (örn: EUR)"),
+    amount: float = Query(1.0, description="Çevrilecek miktar")
+):
+    try:
+        with open("data/latest.json", "r") as f:
+            data = json.load(f)
+            rates = data.get("rates", {})
+
+            base = base.upper()
+            target = target.upper()
+
+            if base not in rates or target not in rates:
+                return JSONResponse(content={"error": f"{base} veya {target} bulunamadı"}, status_code=400)
+
+            base_rate = rates[base]
+            target_rate = rates[target]
+
+            # Hesap: amount * (target / base)
+            result = amount * (target_rate / base_rate)
+
+            return {
+                "base": base,
+                "target": target,
+                "amount": amount,
+                "result": round(result, 6)
             }
 
     except Exception as e:
