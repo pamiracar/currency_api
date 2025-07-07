@@ -74,3 +74,32 @@ async def convert_currency(
 
     except Exception as e:
         return JSONResponse(content={"error": str(e)}, status_code=500)
+
+@app.get("/api/all")
+async def get_all_conversions():
+    try:
+        with open("data/latest.json", "r") as f:
+            data = json.load(f)
+            rates = data.get("rates", {})
+
+            all_rates = {}
+
+            for base_currency, base_value in rates.items():
+                base_conversions = {}
+                for target_currency, target_value in rates.items():
+                    if base_currency != target_currency:
+                        base_conversions[target_currency] = round(target_value / base_value, 6)
+                # TRY'yi de dahil et
+                base_conversions["TRY"] = round(1 / base_value, 6)
+                all_rates[base_currency] = base_conversions
+
+            # TRY'nin diğerlerine oranı doğrudan yaz
+            try_conversions = {}
+            for target_currency, value in rates.items():
+                try_conversions[target_currency] = round(value, 6)
+            all_rates["TRY"] = try_conversions
+
+            return all_rates
+
+    except Exception as e:
+        return JSONResponse(content={"error": str(e)}, status_code=500)
