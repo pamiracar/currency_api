@@ -1,18 +1,18 @@
-# Currency API (TRY-based)
+# 💸 Currency API
 
-This is a simple currency exchange rate API built with Python and FastAPI, powered by **live data from the Central Bank of Turkey (TCMB)**. The API provides real-time exchange rates relative to the Turkish Lira (TRY).
+This is a public and open-source **Currency API** built with **FastAPI** in Python.  
+It fetches live exchange rates directly from the **Central Bank of Turkey (TCMB)** and exposes them as simple REST endpoints.
 
-🌐 **Live URL**: https://currency-api-a1i1.onrender.com
+🔗 **Live API:** [https://currency-api-a1i1.onrender.com](https://currency-api-a1i1.onrender.com)
 
 ---
 
-## 🔧 Endpoints
+## 🧩 Endpoints
 
-### GET /api/rates
+### ✅ `/api/rates`
+Returns all exchange rates **based on TRY**.
 
-Returns all exchange rates based on Turkish Lira (TRY).
-
-**Example Response:**
+**Example response:**
 ```json
 {
   "base": "TRY",
@@ -20,24 +20,22 @@ Returns all exchange rates based on Turkish Lira (TRY).
   "rates": {
     "USD": 32.50,
     "EUR": 35.90,
-    "GBP": 42.80,
-    ...
+    "GBP": 42.80
   }
 }
 ```
 
 ---
 
-### GET /api/rate?target={currency_code}
+### ✅ `/api/rate?target=USD`
+Returns 1 TRY in the specified currency.
 
-Returns the exchange rate of 1 TRY to the selected currency.
-
-**Example Request:**
+**Example:**
 ```
 GET /api/rate?target=USD
 ```
 
-**Example Response:**
+**Response:**
 ```json
 {
   "base": "TRY",
@@ -48,44 +46,72 @@ GET /api/rate?target=USD
 
 ---
 
-## 📦 Tech Stack
+### 🧠 `/api/all`  
+Returns exchange rates between **all supported currencies**, based on TRY as the base source.  
+Every currency is calculated as a "base", using the ratio of values from TCMB.
+
+**Example Response (partial):**
+```json
+{
+  "USD": {
+    "EUR": 1.09375,
+    "GBP": 1.28125,
+    "TRY": 32.0
+  },
+  "EUR": {
+    "USD": 0.9142,
+    "GBP": 1.1714,
+    "TRY": 35.0
+  },
+  "TRY": {
+    "USD": 0.03125,
+    "EUR": 0.02857
+  }
+}
+```
+
+---
+
+## ⚙️ Tech Stack
 
 - Python 3
 - FastAPI
-- Requests
 - Hosted on Render.com
+- Data from [TCMB (Central Bank of Turkey)](https://www.tcmb.gov.tr/kurlar/today.xml)
 
 ---
 
 ## 🚀 How It Works
 
-1. Data is fetched directly from the [TCMB (Central Bank of Turkey)](https://www.tcmb.gov.tr/kurlar/today.xml) via their public XML feed.
-2. Rates are parsed, converted to JSON, and saved into `data/latest.json`.
-3. FastAPI serves this JSON via the `/api/rates` and `/api/rate` endpoints.
+1. `fetch_rates.py` pulls XML data from TCMB daily.
+2. It parses and converts it into `latest.json`.
+3. `main.py` (FastAPI) reads this JSON and exposes REST endpoints.
 
 ---
 
-## 📂 Project Structure
+## 📁 Project Structure
 
 ```
 currency_api/
-├── fetch_rates.py       # Pulls data from TCMB
-├── main.py              # FastAPI server
+├── fetch_rates.py       # Data fetcher (from TCMB XML)
+├── main.py              # FastAPI backend
 ├── data/
-│   └── latest.json      # Stores current rates
-└── requirements.txt     # Dependencies
+│   └── latest.json      # Stored currency data
+└── requirements.txt     # Python dependencies
 ```
 
 ---
 
-## 🧪 Try It Live
+## 💬 Use Cases
 
-- All rates: https://currency-api-a1i1.onrender.com/api/rates  
-- Specific rate: https://currency-api-a1i1.onrender.com/api/rate?target=USD
+- Mobile apps (e.g. Flutter)
+- Location-based currency detection
+- Currency converters
+- Finance dashboards
 
 ---
 
-## 🧑‍💻 Author
+## 🧑‍💻 Developer
 
-Developed by **Pamir** with 💪 — feel free to use, fork or improve.
-
+Built by [@Pamir](https://github.com/pamiracar)  
+Use it freely, clone it, extend it, or power your next app with it 🔥
