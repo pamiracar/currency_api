@@ -87,10 +87,5 @@ currency_api/
 
 ## 🧑‍💻 Author
 
-Developed by **@Pamir** with 💪 — feel free to use, fork or improve.
+Developed by **Pamir** with 💪 — feel free to use, fork or improve.
 
----
-
-## 📄 License
-
-MIT
