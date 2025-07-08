@@ -1,0 +1,32 @@
+name: Fetch TCMB Rates
+
+on:
+  schedule:
+    - cron: '0 6 * * *'  # Her gün saat 09:00 (UTC+3 Türkiye saatiyle)
+  workflow_dispatch:  # Elle tetikleme için
+
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run fetch_rates.py
+        run: python fetch_rates.py
+
+      - name: Commit and push latest.json
+        run: |
+          git config --global user.name "TCMB Bot"
+          git config --global user.email "bot@example.com"
+          git add data/latest.json
+          git commit -m "🔄 Auto update: TCMB latest.json"
+          git push
