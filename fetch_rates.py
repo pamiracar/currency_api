@@ -30,7 +30,7 @@ def fetch_tcmb():
 
     result = {
         "base": "TRY",
-        "date": datetime.now().strftime("%Y %m %d"),
+        "date": datetime.now().strftime("%Y/%m/%d"),
         "rates": rates,
     }
 
