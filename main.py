@@ -81,6 +81,7 @@ async def get_all_conversions():
         with open("data/latest.json", "r") as f:
             data = json.load(f)
             rates = data.get("rates", {})
+            date = data.get("date", None)
 
             all_rates = {}
 
@@ -99,7 +100,10 @@ async def get_all_conversions():
                 try_conversions[target_currency] = round(value, 6)
             all_rates["TRY"] = try_conversions
 
-            return all_rates
+            return {
+                "date": date,
+                "data": all_rates
+            }
 
     except Exception as e:
         return JSONResponse(content={"error": str(e)}, status_code=500)
