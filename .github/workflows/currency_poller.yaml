@@ -1,0 +1,17 @@
+name: Currency API Poller
+
+on:
+  schedule:
+    - cron: '*/5 * * * *'  # Her 5 dakikada bir
+  workflow_dispatch:       # Manuel tetikleme için
+
+jobs:
+  fetch-currencies:
+    runs-on: ubuntu-latest
+    steps:
+      - name: API'den döviz verilerini çek
+        run: |
+          echo "API'ye istek atılıyor..."
+          curl -s "https://currency-api-a1i1.onrender.com/api/all" | jq .
+        env:
+          LC_ALL: en_US.UTF-8  # JSON çıktısı için karakter kodlaması
