@@ -2,7 +2,7 @@ name: Fetch TCMB Rates
 
 on:
   schedule:
-    - cron: '0 6 * * *'  # Her gün saat 09:00 (UTC+3 Türkiye saatiyle)
+    - cron: '0 12 * * *'  # Her gün saat 09:00 (UTC+3 Türkiye saatiyle)
   workflow_dispatch:  # Elle tetikleme için
 
 jobs:
